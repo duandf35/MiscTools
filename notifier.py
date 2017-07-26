@@ -1,12 +1,12 @@
 from service.errors import NotifierError
+from service.tracker import TrainTracker
+from os.path import dirname, abspath
 import sys
-import time
+import csv
 
 
 class Notifier:
     __api_key = None
-    __start = True
-    __interval = 1
 
     def parse(self):
         sys.argv.pop(0)
@@ -18,30 +18,32 @@ class Notifier:
                 if not sys.argv:
                     raise NotifierError('No value is passed for attribute {}'.format(arg))
                 self.__api_key = sys.argv.pop(0)
-            elif arg == '--interval':
-                if not sys.argv:
-                    raise NotifierError('No value is passed for attribute {}'.format(arg))
-                self.__interval = sys.argv.pop(0)
             else:
                 raise NotifierError('Unknown attribute: {}'.format(arg))
 
-    def start(self):
-        if self.__interval < 1:
-            raise NotifierError('Interval can not be less than 1s')
+    def start(self, target_routes=()):
+        for route in target_routes:
+            tracker = TrainTracker(self.__api_key)
+            results = tracker.directions(route[0], route[1])
 
-        while self.__start:
-            time.sleep(self.__interval)
+            print([result['summary'] for result in results])
 
-            # TODO: implementation
-
-    def stop(self):
-        self.__start = False
 
 if __name__ == '__main__':
     n = Notifier()
 
     try:
+        routes = []
+        with open(f'{dirname(abspath(__file__))}/route.csv', 'r') as f:
+            for row in csv.reader(f):
+                routes.append(row)
+
+            # get rid of the header
+            if routes:
+                routes.pop(0)
+        f.close()
+
         n.parse()
-        n.start()
+        n.start(routes)
     except NotifierError as e:
         print('Unable to start notifier. {}'.format(e.message))
