@@ -6,7 +6,9 @@ import csv
 
 
 class Notifier:
-    __api_key = None
+
+    def __init__(self):
+        self.__api_key = None
 
     def parse(self):
         sys.argv.pop(0)

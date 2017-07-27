@@ -20,8 +20,10 @@ class TrainTracker:
                 for transit in [step['transit_details'] for step in detail['steps']
                                 if step['travel_mode'] != 'WALKING']:
                     transits.append({
-                        'arrival': {'stop': transit['arrival_stop']['name'], 'time': transit['arrival_time']},
-                        'departure': {'stop': transit['departure_stop']['name'], 'time': transit['departure_time']}
+                        'arrival': {'stop': transit['arrival_stop']['name'],
+                                    'time': transit['arrival_time']['text']},
+                        'departure': {'stop': transit['departure_stop']['name'],
+                                      'time': transit['departure_time']['text']}
                     })
 
                 # TODO: include total walking distance and duration
