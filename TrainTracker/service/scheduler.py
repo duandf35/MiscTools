@@ -12,3 +12,5 @@ class Scheduler:
     +------------ Minute            (range: 0-59)
     """
 
+    def start(self):
+        pass

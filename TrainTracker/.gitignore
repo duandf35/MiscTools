@@ -1,5 +1,9 @@
 .idea
 */__pycache__
+*/**/.DS_Store
+schedule
 *.txt
 *.sh
-route.csv
+*.csv
+*.zip
+tracker.py
