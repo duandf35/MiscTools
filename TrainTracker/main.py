@@ -5,16 +5,16 @@ from service.notifier import Notifier
 def __parse_targets_csv(notifier, file):
     import csv
 
-    defined_routes = []
+    target_stops = []
     with open(file, 'r') as f:
         for row in csv.reader(f):
-            defined_routes.append(row)
+            target_stops.append({'from': row[0], 'to': row[1], 'train': row[2]})
 
-        # get rid of the header
-        if defined_routes:
-            defined_routes.pop(0)
+        # get rid of the csv header
+        if target_stops:
+            target_stops.pop(0)
 
-    notifier.routes = defined_routes[0]
+    notifier.routes = target_stops
 
 
 def __parse_auth_stdin(notifier):
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         n = Notifier()
 
         __parse_auth_stdin(n)
-        __parse_targets_csv(n, f'{dirname(abspath(__file__))}/route.csv')
+        __parse_targets_csv(n, f'{dirname(abspath(__file__))}/stops.csv')
 
         n.start()
     except NotifierError as e:

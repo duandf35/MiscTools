@@ -6,15 +6,18 @@ from .messenger import *
 
 class Notifier:
 
-    def __init__(self, routes=None, usr=None, pwd=None):
-        self.routes = routes
+    def __init__(self, stops=None, usr=None, pwd=None):
+        self.stops = stops
         self.usr = usr
         self.pwd = pwd
 
     def start(self):
-        for k, v in {'routes': self.routes, 'usr': self.usr, 'pwd': self.pwd}.items():
+        for k, v in {'routes': self.stops, 'usr': self.usr, 'pwd': self.pwd}.items():
             if not v:
                 raise NotifierError(f'Missing property {k}')
 
-        resp = Tracker(self.usr, self.pwd).start(self.routes)
-        print(resp)
+        metra = Tracker(self.usr, self.pwd, self.stops)
+
+        schedule = metra.get_schedule()
+        alert = metra.get_alert()
+        update = metra.get_update()

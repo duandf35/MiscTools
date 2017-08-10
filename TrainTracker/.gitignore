@@ -6,4 +6,5 @@ schedule
 *.sh
 *.csv
 *.zip
+*.json
 tracker.py
