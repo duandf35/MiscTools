@@ -1,5 +1,5 @@
-from service.errors import NotifierError
-from service.notifier import Notifier
+from lib.errors import NotifierError
+from lib.notifier import Notifier
 
 
 def __parse_targets_csv(notifier, file):
@@ -14,7 +14,7 @@ def __parse_targets_csv(notifier, file):
         if target_stops:
             target_stops.pop(0)
 
-    notifier.routes = target_stops
+    notifier.stops = target_stops
 
 
 def __parse_auth_stdin(notifier):

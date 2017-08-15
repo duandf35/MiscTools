@@ -1,5 +1,5 @@
 from .errors import NotifierError
-from .metra import Tracker
+from .metra import Metra
 from .scheduler import *
 from .messenger import *
 
@@ -12,12 +12,12 @@ class Notifier:
         self.pwd = pwd
 
     def start(self):
-        for k, v in {'routes': self.stops, 'usr': self.usr, 'pwd': self.pwd}.items():
+        for k, v in {'stops': self.stops, 'usr': self.usr, 'pwd': self.pwd}.items():
             if not v:
                 raise NotifierError(f'Missing property {k}')
 
-        metra = Tracker(self.usr, self.pwd, self.stops)
+        metra = Metra(self.usr, self.pwd, self.stops)
 
-        schedule = metra.get_schedule()
-        alert = metra.get_alert()
-        update = metra.get_update()
+        # print(metra.get_schedule())
+        print(metra.get_alert())
+        print(metra.get_update())
