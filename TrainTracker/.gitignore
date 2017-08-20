@@ -1,10 +1,13 @@
 .idea
-*/__pycache__
+__pycache__
 */**/.DS_Store
-schedule
+metrarawdata
+internal
+sample
 *.txt
-*.sh
 *.csv
 *.zip
 *.json
+*.db
+start.sh
 tracker.py

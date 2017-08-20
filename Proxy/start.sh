@@ -24,10 +24,10 @@ function stop {
 
 while (( $# > 0 ))
 do
-  opt="$1"
+  opt=$1
   shift
 
-  case $opt in
+  case ${opt} in
     -s)
       stop
       exit 0;
