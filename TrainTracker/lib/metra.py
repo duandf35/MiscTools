@@ -1,38 +1,34 @@
-from os import environ
 from .errors import MetraError
 import sqlite3
 
 
 class Metra:
-    usr = environ['METRA_USR']
-    pwd = environ['METRA_PWD']
-    database = environ['METRA_DB']
-    api_host = environ['METRA_API_HOST']
-    api_alerts = environ['METRA_API_ALERTS']
-    api_updates = environ['METRA_API_TRIP_UPDATES']
-    api_positions = environ['METRA_API_POSITIONS']
+    def __init__(self, usr, pwd, database, host, api_alerts, api_positions, api_updates):
+        self.usr = usr
+        self.pwd = pwd
+        self.database = database
+        self.host = host
+        self.api_alerts = api_alerts
+        self.api_positions = api_positions
+        self.api_updates = api_updates
 
-    @staticmethod
-    def get_alert():
-        return Metra.__get(Metra.api_alerts)
+    def get_alert(self):
+        return self.__get(self.api_alerts)
 
-    @staticmethod
-    def get_update():
-        return Metra.__get(Metra.api_updates)
+    def get_update(self):
+        return self.__get(self.api_updates)
 
-    @staticmethod
-    def get_positions():
-        return Metra.__get(Metra.api_positions)
+    def get_positions(self):
+        return self.__get(self.api_positions)
 
-    @staticmethod
-    def __get(path):
+    def __get(self, path):
         from http.client import HTTPSConnection
         from base64 import b64encode
 
-        token = b64encode(f'{Metra.usr}:{Metra.pwd}'.encode('utf-8')).decode('ascii')
+        token = b64encode(f'{self.usr}:{self.pwd}'.encode('utf-8')).decode('ascii')
         headers = {'Authorization': f'Basic {token}'}
 
-        conn = HTTPSConnection(Metra.api_host)
+        conn = HTTPSConnection(self.host)
         conn.request('GET', path, headers=headers)
         resp = conn.getresponse()
         reason = resp.reason
@@ -44,36 +40,46 @@ class Metra:
 
         return data.decode('utf8')
 
-    @staticmethod
-    def get_stops():
-        return Metra.__query(['stop_id', 'stop_name', 'stop_lat', 'stop_lon'], 'stops')
+    def get_stops(self):
+        return self.__query(columns=['stop_id', 'stop_name', 'stop_lat', 'stop_lon'], table='stops')
 
-    @staticmethod
-    def get_trips():
-        return Metra.__query(['route_id', 'trip_id', 'trip_headsign', 'direction_id'], 'trips')
+    def get_trips(self, route_id=None):
+        criteria = None
+        if not route_id:
+            criteria = {'key': 'route_id', 'value': route_id}
 
-    @staticmethod
-    def get_stop_times():
-        return Metra.__query(['trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence'], 'stop_times')
+        return self.__query(columns=['route_id', 'trip_id', 'trip_headsign', 'direction_id'],
+                            table='trips', eq_criteria=criteria)
 
-    @staticmethod
-    def get_routes():
-        return Metra.__query(['route_id', 'route_short_name', 'route_long_name'], 'routes')
+    def get_stop_times(self, stop_id=None):
+        criteria = None
+        if not stop_id:
+            criteria = {'key': 'stop_id', 'value': stop_id}
 
-    @staticmethod
-    def __query(columns, table):
-        sql = f"SELECT {str.join(',', columns)} FROM {table}"
+        return self.__query(columns=['trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence'],
+                            table='stop_times', eq_criteria=criteria)
 
-        conn = sqlite3.connect(Metra.database)
-        cur = conn.cursor()
-        cur.execute(sql)
-        results = cur.fetchall()
-        conn.close()
+    def get_routes(self):
+        return self.__query(columns=['route_id', 'route_short_name', 'route_long_name'], table='routes')
 
-        return Metra.__to_resp(columns, results)
+    def __query(self, columns, table, eq_criteria=None):
+        try:
+            sql = f"SELECT {str.join(',', columns)} FROM {table}"
 
-    @staticmethod
-    def __to_resp(fields, values):
+            if eq_criteria:
+                sql += f" WHERE {eq_criteria['key']} = {eq_criteria['value']}"
+
+            conn = sqlite3.connect(self.database)
+            cur = conn.cursor()
+            cur.execute(sql)
+            results = cur.fetchall()
+            conn.close()
+
+            return self.__to_list(columns, results)
+        except sqlite3.OperationalError as e:
+            raise MetraError(f'Unable to connect database or table {table} does not exist')
+
+    def __to_list(self, fields, values):
         resp = []
         entry = {}
 

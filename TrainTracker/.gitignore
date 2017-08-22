@@ -9,5 +9,6 @@ sample
 *.zip
 *.json
 *.db
+*.ini
 start.sh
 tracker.py
