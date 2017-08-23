@@ -44,7 +44,7 @@ class Metra:
 
     def get_trips(self, route_id=None):
         criteria = None
-        if not route_id:
+        if route_id:
             criteria = {'key': 'route_id', 'value': route_id}
 
         return self.__query(columns=['route_id', 'trip_id', 'trip_headsign', 'direction_id'],
@@ -52,7 +52,7 @@ class Metra:
 
     def get_stop_times(self, stop_id=None):
         criteria = None
-        if not stop_id:
+        if stop_id:
             criteria = {'key': 'stop_id', 'value': stop_id}
 
         return self.__query(columns=['trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence'],
@@ -66,7 +66,9 @@ class Metra:
             sql = f"SELECT {str.join(',', columns)} FROM {table}"
 
             if eq_criteria:
-                sql += f" WHERE {eq_criteria['key']} = {eq_criteria['value']}"
+                value = eq_criteria['value']
+                value = f"'{value}'" if isinstance(value, str) else value
+                sql += f" WHERE {eq_criteria['key']} = {value}"
 
             conn = sqlite3.connect(self.database)
             cur = conn.cursor()
@@ -74,20 +76,14 @@ class Metra:
             results = cur.fetchall()
             conn.close()
 
-            return self.__to_list(columns, results)
+            entry_list = []
+            for value in results:
+                entry_list.append({k: v for k, v in zip(columns, value)})
+
+            return entry_list
+
         except sqlite3.OperationalError as e:
-            raise MetraError(f'Unable to connect database or table {table} does not exist')
-
-    def __to_list(self, fields, values):
-        resp = []
-        entry = {}
-
-        for value in values:
-            for pair in zip(fields, value):
-                entry[pair[0]] = pair[1]
-            resp.append(entry)
-
-        return resp
+            raise MetraError(f'Unable to process the query, error: {e}.')
 
 
 class MetraError(Exception):
