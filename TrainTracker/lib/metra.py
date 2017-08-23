@@ -1,16 +1,15 @@
-from .errors import MetraError
 import sqlite3
 
 
 class Metra:
-    def __init__(self, usr, pwd, database, host, api_alerts, api_positions, api_updates):
+    def __init__(self, usr, pwd, database, **api):
         self.usr = usr
         self.pwd = pwd
         self.database = database
-        self.host = host
-        self.api_alerts = api_alerts
-        self.api_positions = api_positions
-        self.api_updates = api_updates
+        self.host = api['host']
+        self.api_alerts = api['alerts']
+        self.api_positions = api['positions']
+        self.api_updates = api['updates']
 
     def get_alert(self):
         return self.__get(self.api_alerts)
@@ -89,3 +88,9 @@ class Metra:
             resp.append(entry)
 
         return resp
+
+
+class MetraError(Exception):
+    def __init__(self, message):
+        super().__init__(self, message)
+        self.message = message
