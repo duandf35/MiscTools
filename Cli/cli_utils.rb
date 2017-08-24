@@ -40,7 +40,8 @@ module CliUtils
   def create_options(target_name, collection, &desc)
     prompt = "Select #{target_name}:\n"
 
-    unless collection
+    # 'unless collection' doesn't work since empty collection in ruby is truthy
+    if collection.nil? or collection.empty?
       puts 'No option available!'
       exit(1)
     end
