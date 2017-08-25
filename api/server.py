@@ -11,10 +11,10 @@ config.read('config.ini')
 metra = Metra(usr=config['METRA']['USR'],
               pwd=config['METRA']['PWD'],
               database=config['METRA']['DB'],
-              host=config['METRA_API']['HOST'],
-              alerts=config['METRA_API']['ALERTS'],
-              positions=config['METRA_API']['POSITIONS'],
-              updates=config['METRA_API']['TRIP_UPDATES'])
+              host=config['METRA']['HOST'],
+              alerts=config['METRA']['ALERTS'],
+              positions=config['METRA']['POSITIONS'],
+              updates=config['METRA']['TRIP_UPDATES'])
 
 
 @app.route('/api/ok')

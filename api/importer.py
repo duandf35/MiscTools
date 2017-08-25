@@ -103,8 +103,8 @@ if __name__ == '__main__':
 
     for k, v in {'file': file, 'table': table, 'database': database}.items():
         if not v:
-            print(f'{k} is missing')
-            print('-f | set the path to csv file\n'
+            print(f'{k} is missing\n'
+                  '-f | set the path to csv file\n'
                   '-t | set the table name\n'
                   '-d | set the path to database file\n')
             exit(1)
