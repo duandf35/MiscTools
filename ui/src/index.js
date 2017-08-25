@@ -3,19 +3,17 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import DevTools from './devTools'
+import monitor from './reducers/monitor'
+import MainStage from './components/MainStage'
 
-// let store = createStore(todoApp, DevTools.instrument())
-//
-// render(
-//     <Provider store={store}>
-//         <div>
-//             <DevTools />
-//         </div>
-//     </Provider>,
-//     document.body
-// )
+let store = createStore(monitor, DevTools.instrument())
 
 render(
-    <div>Train Monitor</div>,
-    document.body
+    <Provider store={store}>
+        <div>
+            <MainStage/>
+            <DevTools/>
+        </div>
+    </Provider>,
+    document.getElementById('tt-ui')
 )

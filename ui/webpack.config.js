@@ -13,9 +13,7 @@ const PROD_BUILD_DIR = path.resolve(__dirname, 'public');
 module.exports = {
     // be able to debug with the source code
     devtool: 'source-map',
-    entry: [
-        APP_DIR + '/index.js'
-    ],
+    entry: APP_DIR + '/index.js',
     output: {
         filename: 'bundle.js',
         path: BUILD_DIR,
@@ -25,7 +23,10 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('app.css'),
         // generate the index.html
-        new HtmlWebpackPlugin({ title: 'train-monitor' }),
+        new HtmlWebpackPlugin({
+            title: 'train-monitor',
+            template: APP_DIR + '/index.ejs'
+        }),
         devFlagPlugin
     ],
     module: {
@@ -47,7 +48,7 @@ module.exports = {
     devServer: {
         host: '0.0.0.0',
         disableHostCheck: true,
-        contentBase: BUILD_DIR, // APP_DIR not work at this time unless the generated index.html is added into the dir
+        contentBase: BUILD_DIR,
         compress: false,
         port: 9000,
         inline: false // no need when HotModuleReplacement is used
