@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import styles from 'spectre.css/dist/spectre.css'
 
 // https://facebook.github.io/react/docs/state-and-lifecycle.html
 class Clock extends React.Component {
@@ -28,7 +29,7 @@ class Clock extends React.Component {
 
     render() {
         return (
-            <div className='text-primary'>{this.state.currentTime}</div>
+            <div className={styles['text-primary']}>{this.state.currentTime}</div>
         )
     }
 }

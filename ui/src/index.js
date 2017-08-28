@@ -5,7 +5,6 @@ import { createStore } from 'redux'
 import DevTools from './devTools'
 import monitor from './reducers/monitor'
 import MainStage from './components/MainStage'
-import './index.css'
 
 let store = createStore(monitor, DevTools.instrument())
 

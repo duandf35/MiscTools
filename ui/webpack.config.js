@@ -41,10 +41,8 @@ module.exports = {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    // more config of css-loader: https://github.com/webpack-contrib/css-loader
-                    // more info about React CSS Module: https://javascriptplayground.com/blog/2016/07/css-modules-webpack-react/
-                    // TODO: load the 3rd party css lib as module
-                    use: 'css-loader'
+                    // load css as module
+                    use: 'css-loader?modules&localIdentName="[name]__[local]__[hash:base64:5]"'
                 })
             }
         ]
