@@ -1,49 +1,56 @@
-let path = require('path');
+let resolve = require('path').resolve;
 let webpack = require('webpack');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let devFlagPlugin = new webpack.DefinePlugin({
-   __DEV__: JSON.stringify(JSON.parse(process.env.DEBUG || 'false'))
-});
 
-const BUILD_DIR = path.resolve(__dirname, 'dist');
-const APP_DIR = path.resolve(__dirname, 'src');
-const PROD_BUILD_DIR = path.resolve(__dirname, 'public');
+const BUILD_DIR = resolve(__dirname, 'dist');
+const PUBLIC_PATH = resolve(__dirname, '/');
+const SRC_DIR = resolve(__dirname, 'src');
+
+const __DEV__ = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     // be able to debug with the source code
     devtool: 'source-map',
-    entry: APP_DIR + '/index.js',
+    entry: SRC_DIR + '/index.js',
     output: {
         filename: 'bundle.js',
         path: BUILD_DIR,
-        publicPath: PROD_BUILD_DIR
+        publicPath: PUBLIC_PATH
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin('app.css'),
+        new ExtractTextPlugin({
+            filename: 'bundle.css',
+            allChunks: true
+        }),
         // generate the index.html
         new HtmlWebpackPlugin({
             title: 'train-monitor',
-            template: APP_DIR + '/index.ejs'
-        }),
-        devFlagPlugin
+            template: SRC_DIR + '/index.ejs'
+        })
     ],
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.jsx?$/,
-                loaders: ['react-hot-loader', 'babel-loader'],
-                include: APP_DIR
+                use: ['react-hot-loader', 'babel-loader'],
+                include: SRC_DIR
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style-loader!css-loader')
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    // more config of css-loader: https://github.com/webpack-contrib/css-loader
+                    // more info about React CSS Module: https://javascriptplayground.com/blog/2016/07/css-modules-webpack-react/
+                    // TODO: load the 3rd party css lib as module
+                    use: 'css-loader'
+                })
             }
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json']
+        extensions: ['.js', '.jsx', '.json', 'css']
     },
     devServer: {
         host: '0.0.0.0',
