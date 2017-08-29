@@ -4,8 +4,8 @@ import styles from 'spectre.css/dist/spectre.css'
 
 // https://facebook.github.io/react/docs/state-and-lifecycle.html
 class Clock extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.timeFormat = 'h:mm:ss a, dddd, MM/DD/YYYY';
         this.state = {currentTime: moment().format(this.timeFormat)};
     }
