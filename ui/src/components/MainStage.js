@@ -1,6 +1,6 @@
 import React from 'react'
 import Clock from './Clock'
-import StopListContainer from "../containers/StopListContainer";
+import RouteList from "../containers/RouteList";
 
 class MainStage extends React.Component {
     render() {
@@ -12,7 +12,7 @@ class MainStage extends React.Component {
                         <Clock/>
                         <div>menu</div>
                     </div>
-                    <StopListContainer/>
+                    <RouteList/>
                 </div>
             </div>
         )

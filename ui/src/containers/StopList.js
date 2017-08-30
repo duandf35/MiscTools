@@ -1,11 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
-import Stop from './Stop'
+import Stop from '../components/Stop'
+import { addStop } from '../actions'
 
 class StopList extends React.Component {
-    constructor({ stops }) {
+    constructor() {
         super();
-        this.stops = stops;
+        this.stops = [];
     }
 
     render() {
@@ -23,14 +25,17 @@ StopList.propTypes = {
     stops: PropTypes.arrayOf(
         PropTypes.shape({
             name: PropTypes.string.isRequired,
-            route: PropTypes.string.isRequired,
-            trip: PropTypes.string.isRequired,
-            headSign: PropTypes.string.isRequired,
-            arrival: PropTypes.string.isRequired,
-            departure: PropTypes.string.isRequired,
             coordinate: PropTypes.arrayOf(PropTypes.number).isRequired
         }).isRequired
     ).isRequired
 };
 
-export default StopList
+const mapStateToProps = (state) => {
+    return {
+        route: state.data.route,
+        name: state.data.name,
+        coordinate: state.data.coordinate
+    }
+};
+
+export default connect(mapStateToProps)(StopList)
