@@ -4,22 +4,13 @@ import { PropTypes } from 'prop-types'
 import Stop from '../components/Stop'
 import { addStop } from '../actions'
 
-class StopList extends React.Component {
-    constructor() {
-        super();
-        this.stops = [];
-    }
-
-    render() {
-        return(
-            <ul>
-                {this.stops.map(stop => (
-                    <Stop key={stop.id} {...stop}/>
-                ))}
-            </ul>
-        )
-    }
-}
+const StopList = ({ stops }) => (
+    <ul>
+        {stops.map(stop =>
+            <Stop key={stop.id} {...stop}/>
+        )}
+    </ul>
+);
 
 StopList.propTypes = {
     stops: PropTypes.arrayOf(
@@ -31,11 +22,7 @@ StopList.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    return {
-        route: state.data.route,
-        name: state.data.name,
-        coordinate: state.data.coordinate
-    }
+    return { stops: state.stops };
 };
 
 export default connect(mapStateToProps)(StopList)

@@ -3,26 +3,16 @@ import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import Route from '../components/Route'
 
-class RouteList extends React.Component {
-    constructor() {
-        super();
-        this.routes = [];
-    }
+// TODO: how to do it in es6 class?
 
-    componentDidMount() {
-
-    }
-
-    render() {
-        return(
-            <ul>
-                {this.routes.map(route => (
-                    <Route key={route.id} {...route}/>
-                ))}
-            </ul>
-        )
-    }
-}
+// { routes } extracts the 'routes' field from Redux state
+const RouteList = ({ routes }) => (
+    <ul>
+        {routes.map((route, index) =>
+            <Route key={index} {...route}/>
+        )}
+    </ul>
+);
 
 RouteList.propTypes = {
     routes: PropTypes.arrayOf(
@@ -34,7 +24,7 @@ RouteList.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    return state
+    return { routes: state.routes };
 };
 
 export default connect(mapStateToProps)(RouteList)

@@ -6,6 +6,7 @@ import thunk from 'redux-thunk'
 import DevTools from './devTools'
 import monitor from './reducers'
 import MainStage from './components/MainStage'
+import { fetchRoutes } from './actions/routeAction'
 
 let store = createStore(
     monitor,
@@ -15,6 +16,9 @@ let store = createStore(
         DevTools.instrument()
     )
 );
+
+// initialization
+store.dispatch(fetchRoutes());
 
 render(
     <Provider store={store}>
