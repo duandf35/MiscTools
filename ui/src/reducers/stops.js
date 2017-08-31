@@ -1,22 +1,10 @@
-const stop = (state = {}, action) => {
-    switch (action.type) {
-        case 'ADD_STOP':
-            return {
-                id: action.id,
-                data: action.data
-            };
-        default:
-            return state
-    }
-};
+import { ADD_STOP_REQUEST, ADD_STOP_SUCCESS, ADD_STOP_FAILURE } from '../actions/stopAction';
 
-const stops = (state = [], action) => {
+const stops = (state, action) => {
     switch (action.type) {
-        case 'ADD_STOP':
-            return [
-                ...state,
-                stop(undefined, action)
-            ];
+        case ADD_STOP_REQUEST:
+        case ADD_STOP_SUCCESS:
+        case ADD_STOP_FAILURE:
         default:
             return state
     }
