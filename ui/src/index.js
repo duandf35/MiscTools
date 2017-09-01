@@ -17,9 +17,6 @@ let store = createStore(
     )
 );
 
-// initialization
-store.dispatch(fetchRoutes());
-
 render(
     <Provider store={store}>
         <div>
@@ -29,3 +26,6 @@ render(
     </Provider>,
     document.getElementById('tt-ui')
 );
+
+// initialization
+store.dispatch(fetchRoutes());

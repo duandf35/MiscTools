@@ -1,26 +1,17 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
 
-class Route extends React.Component {
-    constructor({ routeId, name }) {
-        super();
-        this.routeId = routeId;
-        this.name = name;
-    }
-
-    render() {
-        return (
-            <li>
-                <p>{this.routeId}</p>
-                <p>{this.name}</p>
-            </li>
-        )
-    }
-}
+const Route = ({ selected, shortName, longName }) => (
+    <li>
+        <p>{shortName}</p>
+        <p>{longName}</p>
+    </li>
+);
 
 Route.propTypes = {
-    routeId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    selected: PropTypes.bool.isRequired,
+    shortName: PropTypes.string.isRequired,
+    longName: PropTypes.string.isRequired
 };
 
 export default Route
