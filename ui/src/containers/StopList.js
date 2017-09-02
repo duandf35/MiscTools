@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import Stop from '../components/Stop'
-import { addStop } from '../actions'
 
 const StopList = ({ stops }) => (
     <ul>
@@ -15,7 +14,10 @@ const StopList = ({ stops }) => (
 StopList.propTypes = {
     stops: PropTypes.arrayOf(
         PropTypes.shape({
-            name: PropTypes.string.isRequired,
+            selected: PropTypes.bool.isRequired,
+            stopId: PropTypes.string.isRequired,
+            routeId: PropTypes.string.isRequired,
+            stopName: PropTypes.string.isRequired,
             coordinate: PropTypes.arrayOf(PropTypes.number).isRequired
         }).isRequired
     ).isRequired

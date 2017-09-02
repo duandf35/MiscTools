@@ -1,16 +1,16 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
 
-const Route = ({ selected, shortName, longName }) => (
+const Route = ({ selected, routeId, longName }) => (
     <li>
-        <p>{shortName}</p>
+        <p>{routeId}</p>
         <p>{longName}</p>
     </li>
 );
 
 Route.propTypes = {
     selected: PropTypes.bool.isRequired,
-    shortName: PropTypes.string.isRequired,
+    routeId: PropTypes.string.isRequired,
     longName: PropTypes.string.isRequired
 };
 

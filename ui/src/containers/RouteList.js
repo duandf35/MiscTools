@@ -16,12 +16,13 @@ RouteList.propTypes = {
     routes: PropTypes.arrayOf(
         PropTypes.shape({
             selected: PropTypes.bool.isRequired,
-            shortName: PropTypes.string.isRequired,
+            routeId: PropTypes.string.isRequired,
             longName: PropTypes.string.isRequired
         }).isRequired
     ).isRequired
 };
 
+// the key name is the export name of the reducer
 const mapStateToProps = (state) => {
     return { routes: state.routes };
 };
