@@ -22,10 +22,10 @@ def ok():
     return 'ok'
 
 
-@app.route('/api/stops')
-def get_stops():
+@app.route('/api/stops/<string:route_id>')
+def get_stops(route_id):
     try:
-        return jsonify(metra.get_stops())
+        return jsonify(metra.get_stops(route_id))
     except MetraError as e:
         return e.message
 

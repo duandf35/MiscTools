@@ -39,8 +39,13 @@ class Metra:
 
         return data.decode('utf8')
 
-    def get_stops(self):
-        return self.__query(columns=['stop_id', 'stop_name', 'stop_lat', 'stop_lon'], table='stops')
+    def get_stops(self, route_id):
+        return self.__execute(sql=f"SELECT DISTINCT t.route_id, st.stop_id, s.stop_name, s.stop_lat, s.stop_lon \
+                                    FROM stop_times st \
+                                    JOIN trips t ON t.trip_id = st.trip_id \
+                                    JOIN stops s ON st.stop_id = s.stop_id \
+                                    WHERE t.route_id = '{route_id}'",
+                              columns=['route_id', 'stop_id', 'stop_name', 'stop_lat', 'stop_lon'])
 
     def get_trips(self, route_id=None):
         criteria = None
@@ -62,14 +67,17 @@ class Metra:
         return self.__query(columns=['route_id', 'route_short_name', 'route_long_name'], table='routes')
 
     def __query(self, columns, table, eq_criteria=None):
+        sql = f"SELECT {str.join(',', columns)} FROM {table}"
+
+        if eq_criteria:
+            value = eq_criteria['value']
+            value = f"'{value}'" if isinstance(value, str) else value
+            sql += f" WHERE {eq_criteria['key']} = {value}"
+
+        return self.__execute(sql, columns)
+
+    def __execute(self, sql, columns):
         try:
-            sql = f"SELECT {str.join(',', columns)} FROM {table}"
-
-            if eq_criteria:
-                value = eq_criteria['value']
-                value = f"'{value}'" if isinstance(value, str) else value
-                sql += f" WHERE {eq_criteria['key']} = {value}"
-
             conn = sqlite3.connect(self.database)
             cur = conn.cursor()
             cur.execute(sql)
