@@ -5,7 +5,7 @@ let nextRouteId = 0;
 export const ADD_ROUTE_REQUEST = 'ADD_ROUTE_REQUEST';
 export const ADD_ROUTE_SUCCESS = 'ADD_ROUTE_SUCCESS';
 export const ADD_ROUTE_FAILURE = 'ADD_ROUTE_FAILURE';
-export const TOGGLE_ROUTE = 'TOGGLE_ROUTE';
+export const SELECT_ROUTE = 'SELECT_ROUTE';
 
 export const fetchRouteRequest = () => {
     return {
@@ -28,9 +28,9 @@ export const fetchRouteFailure = (error) => {
     }
 };
 
-export const toggleRoute = (id) => {
+export const selectRoute = (id) => {
     return {
-        type: TOGGLE_ROUTE,
+        type: SELECT_ROUTE,
         selected: true,
         id
     }

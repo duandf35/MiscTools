@@ -2,7 +2,7 @@ import {
     ADD_ROUTE_REQUEST,
     ADD_ROUTE_SUCCESS,
     ADD_ROUTE_FAILURE,
-    TOGGLE_ROUTE
+    SELECT_ROUTE
 } from '../actions/routeAction';
 
 // state refers to the individual Route.js object
@@ -16,13 +16,15 @@ const route = (state = {}, action) => {
                 selected: false,
                 ...action.route,
             };
-        case TOGGLE_ROUTE:
+        case SELECT_ROUTE:
             if (state.id !== action.id) {
-                return state;
+                return Object.assign({}, state, {
+                    selected: false
+                })
             }
 
             return Object.assign({}, state, {
-                selected: !state.selected
+                selected: true
             });
         default:
             return state
@@ -38,7 +40,7 @@ const routes = (state = [], action) => {
         case ADD_ROUTE_FAILURE:
             // TODO: handle error
             return state;
-        case TOGGLE_ROUTE:
+        case SELECT_ROUTE:
             return state.map(t => route(t, action));
         default:
             return state
