@@ -42,7 +42,7 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     // load css as module
-                    use: 'css-loader?modules&localIdentName="[name]__[local]__[hash:base64:5]"'
+                    use: 'css-loader?modules&sourceMap&localIdentName="[name]__[local]__[hash:base64:5]"'
                 })
             }
         ]

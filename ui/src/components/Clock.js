@@ -29,7 +29,7 @@ class Clock extends React.Component {
 
     render() {
         return (
-            <div className={styles['text-primary']}>{this.state.currentTime}</div>
+            <div className={[styles['toast'], styles['toast-primary']].join(' ')}>{this.state.currentTime}</div>
         )
     }
 }
