@@ -33,8 +33,9 @@ RouteList.propTypes = {
             selected: PropTypes.bool.isRequired,
             routeId: PropTypes.string.isRequired,
             longName: PropTypes.string.isRequired
-        }).isRequired
-    ).isRequired
+        }).isRequired,
+    ).isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 // the key name is the export name of the reducer

@@ -5,7 +5,7 @@ let nextStopId = 0;
 export const ADD_STOP_REQUEST = 'ADD_STOP_REQUEST';
 export const ADD_STOP_SUCCESS = 'ADD_STOP_SUCCESS';
 export const ADD_STOP_FAILURE = 'ADD_STOP_FAILURE';
-export const TOGGLE_STOP = 'TOGGLE_STOP';
+export const SELECT_STOP = 'SELECT_STOP';
 
 export const fetchStopRequest = (routeId) => {
     return {
@@ -14,12 +14,16 @@ export const fetchStopRequest = (routeId) => {
     }
 };
 
-export const fetchStopSuccess = (routeId, stop) => {
+export const fetchStopsSuccess = (stops) => {
     return {
         type: ADD_STOP_SUCCESS,
-        id: nextStopId++,
-        routeId,
-        stop
+        stops: stops.map(stop => {
+            return {
+                id: nextStopId++,
+                selected: false,
+                ...stop
+            }
+        })
     }
 };
 
@@ -31,9 +35,9 @@ export const fetchStopFailure = (routeId, error) => {
     }
 };
 
-export const toggleRoute = (id) => {
+export const selectStop = (id) => {
     return {
-        type: TOGGLE_STOP,
+        type: SELECT_STOP,
         selected: true,
         id
     }
@@ -46,8 +50,7 @@ export function fetchStops(routeId) {
 
         return axios.get('/api/stops/' + routeId)
             .then(resp => toStops(resp.data), err => dispatch(fetchStopFailure(routeId, err)))
-            .then(stops =>
-                stops.forEach(stop => dispatch(fetchStopSuccess(routeId, stop))))
+            .then(stops => dispatch(fetchStopsSuccess(stops)))
     }
 }
 

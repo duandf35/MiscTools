@@ -3,14 +3,14 @@ import { PropTypes } from 'prop-types'
 import styles from 'spectre.css/dist/spectre.css'
 
 const Route = ({ onClick, selected, routeId, longName }) => (
-    <li className={[styles['card'], getBgColor(selected)].join(' ')}>
+    <li className={[styles['toast'], getBgColor(selected)].join(' ')}>
         <a style={{textDecoration: 'none'}} onClick={e => {
             e.preventDefault();
             onClick();
         }}>
-            <div className={styles['card-header']}>
-                <p className={[styles['card-title'], styles['text-primary']].join(' ')}>{routeId}</p>
-                <p className={styles['card-subtitle']}>{longName}</p>
+            <div>
+                <h3>{routeId}</h3>
+                {longName}
             </div>
         </a>
     </li>
@@ -18,9 +18,9 @@ const Route = ({ onClick, selected, routeId, longName }) => (
 
 function getBgColor(selected) {
     if (selected) {
-        return styles['bg-dark']
+        return ''
     } else {
-        return styles['bg-secondary']
+        return styles['toast-primary']
     }
 }
 
