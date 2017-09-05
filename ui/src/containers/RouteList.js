@@ -2,16 +2,30 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import Route from '../components/Route'
-import { selectRoute } from '../actions/routeAction'
+import { fetchRoutes, selectRoute } from '../actions/routeAction'
+import { fetchStops } from '../actions/stopAction';
 
-// { routes } extracts the 'routes' field from Redux state
-const RouteList = ({ routes, onClick }) => (
-    <ul>
-        {routes.map(route =>
-            <Route key={route.id} {...route} onClick={() => onClick(route.id)}/>
-        )}
-    </ul>
-);
+class RouteList extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    componentWillMount() {
+        const { dispatch } = this.props;
+        dispatch(fetchRoutes())
+    }
+
+    render() {
+        const { routes, onClick } = this.props;
+        return (
+            <ul>
+                {routes.map(route =>
+                    <Route key={route.id} {...route} onClick={() => onClick(route.id, route.routeId)}/>
+                )}
+            </ul>
+        )
+    }
+}
 
 RouteList.propTypes = {
     routes: PropTypes.arrayOf(
@@ -30,9 +44,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onClick: (id) => {
-            dispatch(selectRoute(id))
-        }
+        onClick: (id, routeId) => {
+            dispatch(selectRoute(id));
+            dispatch(fetchStops(routeId));
+        },
+        // pass the default dispatch into the component
+        dispatch: dispatch
     }
 };
 

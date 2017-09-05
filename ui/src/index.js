@@ -6,7 +6,6 @@ import thunk from 'redux-thunk'
 import DevTools from './devTools'
 import monitor from './reducers'
 import MainStage from './components/MainStage'
-import { fetchRoutes } from './actions/routeAction'
 
 let store = createStore(
     monitor,
@@ -26,6 +25,3 @@ render(
     </Provider>,
     document.getElementById('tt-ui')
 );
-
-// initialization
-store.dispatch(fetchRoutes());
