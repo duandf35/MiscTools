@@ -13,11 +13,16 @@ export const fetchRouteRequest = () => {
     }
 };
 
-export const fetchRouteSuccess = (route) => {
+export const fetchRoutesSuccess = (routes) => {
     return {
         type: ADD_ROUTE_SUCCESS,
-        id: nextRouteId++,
-        route
+        routes: routes.map(route => {
+            return {
+                id: nextRouteId++,
+                selected: false,
+                ...route
+            }
+        })
     }
 };
 
@@ -43,8 +48,7 @@ export function fetchRoutes() {
 
         return axios.get('/api/routes')
             .then(resp => toRoutes(resp.data), err => dispatch(fetchRouteFailure(err)))
-            .then(routes =>
-                routes.forEach(route => dispatch(fetchRouteSuccess(route))))
+            .then(routes => dispatch(fetchRoutesSuccess(routes)))
     }
 }
 

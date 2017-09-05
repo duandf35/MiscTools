@@ -5,17 +5,8 @@ import {
     SELECT_ROUTE
 } from '../actions/routeAction';
 
-// state refers to the individual Route.js object
-// the export namespace 'routes' is registered in the reducers/index.js
-// that is the used as the key name in the Redux root state
 const route = (state = {}, action) => {
     switch (action.type) {
-        case ADD_ROUTE_SUCCESS:
-            return {
-                id: action.id,
-                selected: false,
-                ...action.route,
-            };
         case SELECT_ROUTE:
             if (state.id !== action.id) {
                 return Object.assign({}, state, {
@@ -31,14 +22,15 @@ const route = (state = {}, action) => {
     }
 };
 
+// state refers to the 'routes' field in the Redux store
 const routes = (state = [], action) => {
     switch (action.type) {
         case ADD_ROUTE_REQUEST:
             return state;
         case ADD_ROUTE_SUCCESS:
-            return [...state, route(undefined, action)];
+            // return a new list of routes instead of appending to the state
+            return action.routes;
         case ADD_ROUTE_FAILURE:
-            // TODO: handle error
             return state;
         case SELECT_ROUTE:
             return state.map(t => route(t, action));
