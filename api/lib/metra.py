@@ -47,32 +47,32 @@ class Metra:
                                     WHERE t.route_id = '{route_id}'",
                               columns=['route_id', 'stop_id', 'stop_name', 'stop_lat', 'stop_lon'])
 
-    def get_trips(self, route_id=None):
-        criteria = None
-        if route_id:
-            criteria = {'key': 'route_id', 'value': route_id}
+    def get_trips(self, route_id):
+        criteria = f"WHERE route_id = '{route_id}'"
 
         return self.__query(columns=['route_id', 'trip_id', 'trip_headsign', 'direction_id'],
-                            table='trips', eq_criteria=criteria)
+                            table='trips', criteria=criteria)
 
-    def get_stop_times(self, stop_id=None):
-        criteria = None
-        if stop_id:
-            criteria = {'key': 'stop_id', 'value': stop_id}
+    def get_stop_times(self, stop_id, arrival=None, departure=None):
+        criteria = f"WHERE stop_id = '{stop_id}' "
+
+        if arrival:
+            criteria += f"AND arrival_time >= '{arrival}' "
+
+        if departure:
+            criteria += f"AND departure_time <= '{departure}'"
 
         return self.__query(columns=['trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence'],
-                            table='stop_times', eq_criteria=criteria)
+                            table='stop_times', criteria=criteria)
 
     def get_routes(self):
         return self.__query(columns=['route_id', 'route_short_name', 'route_long_name'], table='routes')
 
-    def __query(self, columns, table, eq_criteria=None):
-        sql = f"SELECT {str.join(',', columns)} FROM {table}"
+    def __query(self, columns, table, criteria=None):
+        sql = f"SELECT {str.join(',', columns)} FROM {table} "
 
-        if eq_criteria:
-            value = eq_criteria['value']
-            value = f"'{value}'" if isinstance(value, str) else value
-            sql += f" WHERE {eq_criteria['key']} = {value}"
+        if criteria:
+            sql += criteria
 
         return self.__execute(sql, columns)
 
