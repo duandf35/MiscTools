@@ -39,29 +39,19 @@ def get_stops(route_id):
 @app.route('/api/stop_times/<string:stop_id>')
 def get_stop_times(stop_id):
     """
-    Get scheduled times for a given stop.
-    The window size is 2 hours by default.
+    Get scheduled times for a given stop within a time window.
 
-    Assumption:
-    1. the passed arrival and departure time is timestamp.
-    2. the time zone of the passed arrival and departure is UTC.
     :param stop_id:
     :return:
     """
     try:
-        arrival = request.args.get('arrival')
-        departure = request.args.get('departure')
-
-        arrival = datetime.fromtimestamp(arrival).astimezone(METRA_TZ) if arrival else datetime.now(METRA_TZ)
-        departure = datetime.fromtimestamp(departure).astimezone(METRA_TZ) if departure else None
-
-        if not departure or departure < arrival:
-            departure = arrival + timedelta(hours=METRA_WINDOW)
+        arrival = datetime.now(METRA_TZ)
+        departure = arrival + timedelta(hours=METRA_WINDOW)
 
         arrival = arrival.time()
         departure = departure.time()
 
-        # if the departure is next day, the time is represented as '25:00:00' instead of '01:00:00' in the database
+        # if the train departs next day, the time is represented as '25:00:00' in the database
         if arrival.hour > departure.hour:
             departure = None
 
