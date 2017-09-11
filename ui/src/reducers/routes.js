@@ -5,22 +5,13 @@ import {
     SELECT_ROUTE
 } from '../actions/routeAction';
 
-const route = (state = {}, action) => {
-    switch (action.type) {
-        case SELECT_ROUTE:
-            if (state.id !== action.id) {
-                return Object.assign({}, state, {
-                    selected: false
-                })
-            }
-
-            return Object.assign({}, state, {
-                selected: true
-            });
-        default:
-            return state
+function selectOnlyOne(route, action) {
+    if (route.id !== action.id) {
+        return Object.assign({}, route, { selected: false })
     }
-};
+
+    return Object.assign({}, route, { selected: true });
+}
 
 // state refers to the 'routes' field in the Redux store
 const routes = (state = [], action) => {
@@ -33,7 +24,7 @@ const routes = (state = [], action) => {
         case ADD_ROUTE_FAILURE:
             return state;
         case SELECT_ROUTE:
-            return state.map(t => route(t, action));
+            return state.map(r => selectOnlyOne(r, action));
         default:
             return state
     }

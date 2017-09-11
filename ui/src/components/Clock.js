@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import styles from 'spectre.css/dist/spectre.css'
+import spectre from 'spectre.css/dist/spectre.css'
 
 // https://facebook.github.io/react/docs/state-and-lifecycle.html
 class Clock extends React.Component {
@@ -29,7 +29,7 @@ class Clock extends React.Component {
 
     render() {
         return (
-            <div className={[styles['toast'], styles['toast-primary']].join(' ')}>{this.state.currentTime}</div>
+            <div className={[spectre['toast'], spectre['toast-primary']].join(' ')}>{this.state.currentTime}</div>
         )
     }
 }

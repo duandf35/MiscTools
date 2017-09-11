@@ -5,7 +5,10 @@ let nextStopId = 0;
 export const ADD_STOP_REQUEST = 'ADD_STOP_REQUEST';
 export const ADD_STOP_SUCCESS = 'ADD_STOP_SUCCESS';
 export const ADD_STOP_FAILURE = 'ADD_STOP_FAILURE';
-export const SELECT_STOP = 'SELECT_STOP';
+export const UPDATE_WATCH_STOP_QUEUE = 'UPDATE_WATCH_STOP_QUEUE';
+export const UPDATE_STOP_SELECTION = 'UPDATE_STOP_SELECTION';
+
+export const WATCH_STOP_QUEUE_SIZE = 2;
 
 export const fetchStopRequest = (routeId) => {
     return {
@@ -35,16 +38,21 @@ export const fetchStopFailure = (routeId, error) => {
     }
 };
 
-export const selectStop = (id) => {
+export const updateWatchStopQueue = (stopId) => {
     return {
-        type: SELECT_STOP,
-        selected: true,
-        id
+        type: UPDATE_WATCH_STOP_QUEUE,
+        stopId
+    }
+};
+
+export const updateStopSelection = (stopIds) => {
+    return {
+        type: UPDATE_STOP_SELECTION,
+        stopIds
     }
 };
 
 export function fetchStops(routeId) {
-
     return (dispatch) => {
         dispatch(fetchStopRequest(routeId));
 

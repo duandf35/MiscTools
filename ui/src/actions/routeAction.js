@@ -36,7 +36,6 @@ export const fetchRouteFailure = (error) => {
 export const selectRoute = (id) => {
     return {
         type: SELECT_ROUTE,
-        selected: true,
         id
     }
 };

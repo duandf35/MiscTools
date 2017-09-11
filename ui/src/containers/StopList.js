@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import Stop from '../components/Stop'
-import { selectStop } from "../actions/stopAction";
+import { updateWatchStopQueue } from '../actions/stopAction'
 
 const StopList = ({ stops, onClick }) => (
     <ul>
         {stops.map(stop =>
-            <Stop key={stop.id} {...stop} onClick={() => onClick(stop.id)}/>
+            <Stop key={stop.id} {...stop} onClick={() => onClick(stop.stopId)}/>
         )}
     </ul>
 );
@@ -29,8 +29,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      onClick: (id) => {
-          dispatch(selectStop(id))
+      onClick: (stopId) => {
+          dispatch(updateWatchStopQueue(stopId))
       }
   }
 };

@@ -1,10 +1,11 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import styles from 'spectre.css/dist/spectre.css'
+import spectre from 'spectre.css/dist/spectre.css'
+import { background, anchor} from '../styles';
 
 const Stop = ({ onClick, selected, stopName, coordinate }) => (
-    <li className={[styles['toast'], getBgColor(selected)].join(' ')}>
-        <a style={{textDecoration: 'none'}} onClick={e => {
+    <li className={[spectre['toast'], background(selected)].join(' ')}>
+        <a style={anchor(selected)} onClick={e => {
             e.preventDefault();
             onClick();
         }}>
@@ -14,14 +15,6 @@ const Stop = ({ onClick, selected, stopName, coordinate }) => (
         </a>
     </li>
 );
-
-function getBgColor(selected) {
-    if (selected) {
-        return ''
-    } else {
-        return styles['toast-primary']
-    }
-}
 
 Stop.propTypes = {
     selected: PropTypes.bool.isRequired,
