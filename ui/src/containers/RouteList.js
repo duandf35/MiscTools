@@ -39,9 +39,7 @@ RouteList.propTypes = {
 };
 
 // the key name is the export name of the reducer
-const mapStateToProps = (state) => {
-    return { routes: state.routes };
-};
+const mapStateToProps = ({ routes }) => ({ routes });
 
 const mapDispatchToProps = (dispatch) => {
     return {

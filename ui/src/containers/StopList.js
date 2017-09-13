@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
+import { store } from '../store'
 import Stop from '../components/Stop'
-import { updateWatchStopQueue } from '../actions/stopAction'
+import { updateWatchStopQueue, updateStopSelection } from '../actions/stopAction'
 
 const StopList = ({ stops, onClick }) => (
     <ul>
@@ -11,6 +12,17 @@ const StopList = ({ stops, onClick }) => (
         )}
     </ul>
 );
+
+// if the queue is changed, dispatch the update action
+let cur;
+store.subscribe(() => {
+    let prev = cur;
+    cur = store.getState().watchStops;
+
+    if (cur !== prev) {
+        store.dispatch(updateStopSelection(cur))
+    }
+});
 
 StopList.propTypes = {
     stops: PropTypes.arrayOf(
@@ -23,10 +35,9 @@ StopList.propTypes = {
     onClick: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-    return { stops: state.stops };
-};
+const mapStateToProps = ({ stops }) => ({ stops });
 
+// update the queue
 const mapDispatchToProps = (dispatch) => {
   return {
       onClick: (stopId) => {
