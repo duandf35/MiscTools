@@ -3,14 +3,15 @@ import { PropTypes } from 'prop-types'
 import spectre from 'spectre.css/dist/spectre.css'
 import { background, anchor} from '../styles';
 
-const Stop = ({ onClick, selected, stopName, coordinate }) => (
+const Stop = ({ onClick, selected, stopName, stopId, coordinate }) => (
     <li className={[spectre['toast'], background(selected)].join(' ')}>
         <a style={anchor(selected)} onClick={e => {
             e.preventDefault();
             onClick();
         }}>
             <div>
-                <h5>{stopName}</h5>
+                <h5>{stopId}</h5>
+                {stopName}
             </div>
         </a>
     </li>
