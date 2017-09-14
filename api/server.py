@@ -18,9 +18,9 @@ metra = Metra(usr=config['METRA']['USR'],
               positions=config['METRA']['POSITIONS'],
               updates=config['METRA']['TRIP_UPDATES'])
 
-METRA_TZ = timezone(environ['METRA_TZ'])
+METRA_TZ = timezone(config['METRA']['TIME_ZONE'])
 
-METRA_WINDOW = int(environ['METRA_WINDOW'])
+METRA_WINDOW = int(config['METRA']['TIME_WINDOW'])
 
 
 @app.route('/api/ok')
