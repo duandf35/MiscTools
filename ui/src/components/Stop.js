@@ -1,11 +1,11 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
 import spectre from 'spectre.css/dist/spectre.css'
-import { background, anchor} from '../styles';
+import { btnBackground, btnClicked} from '../styles';
 
 const Stop = ({ onClick, selected, stopName, stopId, coordinate }) => (
-    <li className={[spectre['toast'], background(selected)].join(' ')}>
-        <a style={anchor(selected)} onClick={e => {
+    <li className={[spectre['toast'], btnBackground(selected)].join(' ')}>
+        <a style={btnClicked(selected)} onClick={e => {
             e.preventDefault();
             onClick();
         }}>

@@ -1,6 +1,6 @@
 import spectre from 'spectre.css/dist/spectre.css'
 
-export const background = (selected) => {
+export const btnBackground = (selected) => {
     if (selected) {
         return ''
     }
@@ -8,7 +8,7 @@ export const background = (selected) => {
     return spectre['toast-primary'];
 };
 
-export const anchor = (selected) => {
+export const btnClicked = (selected) => {
     let anchor = { textDecoration: 'none', display: 'block', textAlign: 'center' };
 
     if (selected) {
