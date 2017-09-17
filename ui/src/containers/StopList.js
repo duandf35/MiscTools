@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types'
 import { storeSubscriber } from '../store'
 import Stop from '../components/Stop'
 import { updateWatchStopQueue, updateStopSelection } from '../actions/stopAction'
+import { fetchTrips } from '../actions/tripAction';
 
 const StopList = ({ stops, onClick }) => (
     <ul>
@@ -33,7 +34,8 @@ const mapStateToProps = ({ stops }) => ({ stops });
 const mapDispatchToProps = (dispatch) => {
   return {
       onClick: (stopId) => {
-          dispatch(updateWatchStopQueue(stopId))
+          dispatch(updateWatchStopQueue(stopId));
+          dispatch(fetchTrips(stopId))
       }
   }
 };

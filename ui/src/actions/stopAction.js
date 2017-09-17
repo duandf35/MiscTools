@@ -10,7 +10,7 @@ export const UPDATE_STOP_SELECTION = 'UPDATE_STOP_SELECTION';
 
 export const WATCH_STOP_QUEUE_SIZE = 2;
 
-export const fetchStopRequest = (routeId) => {
+export const fetchStopsRequest = (routeId) => {
     return {
         type: ADD_STOP_REQUEST,
         routeId
@@ -30,7 +30,7 @@ export const fetchStopsSuccess = (stops) => {
     }
 };
 
-export const fetchStopFailure = (routeId, error) => {
+export const fetchStopsFailure = (routeId, error) => {
     return {
         type: ADD_STOP_FAILURE,
         routeId,
@@ -54,10 +54,10 @@ export const updateStopSelection = (stopIds) => {
 
 export function fetchStops(routeId) {
     return (dispatch) => {
-        dispatch(fetchStopRequest(routeId));
+        dispatch(fetchStopsRequest(routeId));
 
         return axios.get('/api/stops/' + routeId)
-            .then(resp => toStops(resp.data), err => dispatch(fetchStopFailure(routeId, err)))
+            .then(resp => toStops(resp.data), err => dispatch(fetchStopsFailure(routeId, err)))
             .then(stops => dispatch(fetchStopsSuccess(stops)))
     }
 }

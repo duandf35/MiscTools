@@ -7,7 +7,7 @@ export const ADD_ROUTE_SUCCESS = 'ADD_ROUTE_SUCCESS';
 export const ADD_ROUTE_FAILURE = 'ADD_ROUTE_FAILURE';
 export const SELECT_ROUTE = 'SELECT_ROUTE';
 
-export const fetchRouteRequest = () => {
+export const fetchRoutesRequest = () => {
     return {
         type: ADD_ROUTE_REQUEST
     }
@@ -26,7 +26,7 @@ export const fetchRoutesSuccess = (routes) => {
     }
 };
 
-export const fetchRouteFailure = (error) => {
+export const fetchRoutesFailure = (error) => {
     return {
         type: ADD_ROUTE_FAILURE,
         error
@@ -43,10 +43,10 @@ export const selectRoute = (id) => {
 export function fetchRoutes() {
 
     return (dispatch) => {
-        dispatch(fetchRouteRequest());
+        dispatch(fetchRoutesRequest());
 
         return axios.get('/api/routes')
-            .then(resp => toRoutes(resp.data), err => dispatch(fetchRouteFailure(err)))
+            .then(resp => toRoutes(resp.data), err => dispatch(fetchRoutesFailure(err)))
             .then(routes => dispatch(fetchRoutesSuccess(routes)))
     }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import Clock from './Clock'
 import RouteList from '../containers/RouteList'
 import StopList from '../containers/StopList'
+import TripList from '../containers/TripList'
 import spectre from 'spectre.css/dist/spectre.css'
 
 class MainStage extends React.Component {
@@ -16,6 +17,9 @@ class MainStage extends React.Component {
                         </div>
                         <div className={[spectre['column'], spectre['col-2']].join(' ')}>
                             <StopList/>
+                        </div>
+                        <div className={[spectre['column'], spectre['col-2']].join(' ')}>
+                            <TripList/>
                         </div>
                         <div className={[spectre['column'], spectre['col-6']].join(' ')}>
                             <div className={spectre['empty']}>
