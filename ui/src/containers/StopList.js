@@ -9,7 +9,7 @@ import { fetchTrips } from '../actions/tripAction';
 const StopList = ({ stops, onClick }) => (
     <ul>
         {stops.map(stop =>
-            <Stop key={stop.id} {...stop} onClick={() => onClick(stop.stopId)}/>
+            <Stop key={stop.id} {...stop} onClick={() => onClick(stop.stopId, stop.routeId)}/>
         )}
     </ul>
 );
@@ -33,9 +33,9 @@ const mapStateToProps = ({ stops }) => ({ stops });
 // update the queue
 const mapDispatchToProps = (dispatch) => {
   return {
-      onClick: (stopId) => {
+      onClick: (stopId, routeId) => {
           dispatch(updateWatchStopQueue(stopId));
-          dispatch(fetchTrips(stopId))
+          dispatch(fetchTrips(stopId, routeId))
       }
   }
 };

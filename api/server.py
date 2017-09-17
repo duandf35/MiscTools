@@ -36,16 +36,18 @@ def get_stops(route_id):
         return e.message
 
 
-@app.route('/api/stop_times/<string:stop_id>')
-def get_stop_times(stop_id):
+@app.route('/api/stop_times/<string:route_id>/<string:stop_id>')
+def get_stop_times(route_id, stop_id):
     """
     Get scheduled times for a given stop within a time window.
 
+    :param route_id:
     :param stop_id:
     :return:
     """
     try:
-        arrival = datetime.now(METRA_TZ)
+        now = datetime.now(METRA_TZ)
+        arrival = now
         departure = arrival + timedelta(hours=METRA_WINDOW)
 
         arrival = arrival.time()
@@ -55,7 +57,7 @@ def get_stop_times(stop_id):
         if arrival.hour > departure.hour:
             departure = None
 
-        return jsonify(metra.get_stop_times(stop_id, arrival, departure))
+        return jsonify(metra.get_stop_times(route_id, stop_id, now.weekday(), arrival, departure))
     except MetraError as e:
         return e.message
 

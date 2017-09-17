@@ -6,17 +6,19 @@ export const ADD_TRIP_REQUEST = 'ADD_TRIP_REQUEST';
 export const ADD_TRIP_SUCCESS = 'ADD_TRIP_SUCCESS';
 export const ADD_TRIP_FAILURE = 'ADD_TRIP_FAILURE';
 
-export const fetchTripsRequest = (stopId) => {
+export const fetchTripsRequest = (stopId, routeId) => {
     return {
         type: ADD_TRIP_REQUEST,
-        stopId
+        stopId,
+        routeId
     }
 };
 
-export const fetchTripsSuccess = (stopId, trips) => {
+export const fetchTripsSuccess = (stopId, routeId, trips) => {
     return {
         type: ADD_TRIP_SUCCESS,
         stopId,
+        routeId,
         trips: trips.map(trip => {
             return {
                 id: nextTripId++,
@@ -26,32 +28,35 @@ export const fetchTripsSuccess = (stopId, trips) => {
     }
 };
 
-export const fetchTripsFailure = (stopId, error) => {
+export const fetchTripsFailure = (stopId, routeId, error) => {
     return {
         type: ADD_TRIP_FAILURE,
         stopId,
+        routeId,
         error
     }
 };
 
-export const fetchTrips = (stopId) => {
+export const fetchTrips = (stopId, routeId) => {
     return (dispatch) => {
-        dispatch(fetchTripsRequest(stopId));
+        dispatch(fetchTripsRequest(stopId, routeId));
 
-        return axios.get('/api/stop_times/' + stopId)
-            .then(resp => toTrips(resp.data), err => dispatch(fetchTripsFailure(stopId, err)))
-            .then(trips => dispatch(fetchTripsSuccess(stopId, trips)))
+        return axios.get('/api/stop_times/' + routeId + '/' + stopId)
+            .then(resp => toTrips(resp.data), err => dispatch(fetchTripsFailure(stopId, routeId, err)))
+            .then(trips => dispatch(fetchTripsSuccess(stopId, routeId, trips)))
     }
 };
 
 function toTrips(trips) {
     return trips.map(trip => {
         return {
+            routeId: trip['route_id'],
             tripId: trip['trip_id'],
             stopId: trip['stop_id'],
             arrival: trip['arrival_time'],
             departure: trip['departure_time'],
-            sequence: trip['stop_sequence']
+            sequence: trip['stop_sequence'],
+            headSign: trip['trip_headsign']
         }
     })
 }

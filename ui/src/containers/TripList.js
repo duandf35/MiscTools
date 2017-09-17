@@ -33,10 +33,17 @@ TripList.propTypes = {
 
 function displayTrips(trips, watchStops) {
     let displayTrips = [];
-
     watchStops.forEach(stopId => {
-        if (trips[stopId]) {
-            displayTrips = displayTrips.concat(trips[stopId])
+        if (displayTrips.length > 0) {
+            let tripIds = trips[stopId].map(trip => {
+                return trip.tripId;
+            });
+
+            displayTrips = displayTrips.filter(trip => {
+               return tripIds.includes(trip.tripId);
+            })
+        } else if (trips[stopId]) {
+            displayTrips = trips[stopId];
         }
     });
 

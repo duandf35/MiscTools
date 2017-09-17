@@ -10,6 +10,7 @@ class Metra:
         self.api_alerts = api['alerts']
         self.api_positions = api['positions']
         self.api_updates = api['updates']
+        self.weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
     def get_alert(self):
         return self.__get(self.api_alerts)
@@ -53,17 +54,20 @@ class Metra:
         return self.__query(columns=['route_id', 'trip_id', 'trip_headsign', 'direction_id'],
                             table='trips', criteria=criteria)
 
-    def get_stop_times(self, stop_id, arrival=None, departure=None):
-        criteria = f"WHERE stop_id = '{stop_id}' "
+    def get_stop_times(self, route_id, stop_id, weekday, arrival, departure):
+        sql = f"SELECT DISTINCT t.route_id, st.trip_id, st.arrival_time, st.departure_time, \
+                st.stop_id, st.stop_sequence, t.trip_headsign \
+                FROM stop_times st \
+                JOIN trips t ON t.trip_id = st.trip_id \
+                JOIN calendar c ON c.service_id = t.service_id \
+                WHERE st.stop_id = '{stop_id}' AND t.route_id = '{route_id}' \
+                AND arrival_time >= '{arrival}' \
+                AND departure_time <= '{departure}' \
+                AND {self.weekdays[weekday]} == 1"
 
-        if arrival:
-            criteria += f"AND arrival_time >= '{arrival}' "
-
-        if departure:
-            criteria += f"AND departure_time <= '{departure}'"
-
-        return self.__query(columns=['trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence'],
-                            table='stop_times', criteria=criteria)
+        return self.__execute(sql=sql,
+                              columns=['route_id', 'trip_id', 'arrival_time', 'departure_time',
+                                       'stop_id', 'stop_sequence', 'trip_headsign'])
 
     def get_routes(self):
         return self.__query(columns=['route_id', 'route_short_name', 'route_long_name'], table='routes')
