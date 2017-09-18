@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { PropTypes } from 'prop-types'
 import Route from '../components/Route'
 import { fetchRoutes, selectRoute } from '../actions/routeAction'
@@ -11,8 +12,8 @@ class RouteList extends React.Component {
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
-        dispatch(fetchRoutes())
+        const { fetchRoutes } = this.props;
+        fetchRoutes()
     }
 
     render() {
@@ -47,8 +48,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(selectRoute(id));
             dispatch(fetchStops(routeId));
         },
-        // pass the default dispatch into the component
-        dispatch: dispatch
+        // pass func into the component
+        ...bindActionCreators({ fetchRoutes }, dispatch),
     }
 };
 

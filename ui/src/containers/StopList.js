@@ -1,15 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { PropTypes } from 'prop-types'
 import { storeSubscriber } from '../store'
 import Stop from '../components/Stop'
 import { updateWatchStopQueue, updateStopSelection } from '../actions/stopAction'
 import { fetchTrips } from '../actions/tripAction';
 
-const StopList = ({ stops, onClick }) => (
+const StopList = ({ stops, onClick, fetchTrips }) => (
     <ul>
         {stops.map(stop =>
-            <Stop key={stop.id} {...stop} onClick={() => onClick(stop.stopId, stop.routeId)}/>
+            <Stop key={stop.id} {...stop} onClick={() => onClick(stop.stopId, stop.routeId)}
+                  fetchTrips={() => fetchTrips(stop.stopId, stop.routeId)}/>
         )}
     </ul>
 );
@@ -35,8 +37,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
       onClick: (stopId, routeId) => {
           dispatch(updateWatchStopQueue(stopId));
-          dispatch(fetchTrips(stopId, routeId))
-      }
+          dispatch(fetchTrips(stopId, routeId));
+      },
+      ...bindActionCreators({ fetchTrips }, dispatch)
   }
 };
 
