@@ -75,14 +75,6 @@ def get_stop_times(route_id, stop_id):
         return e.message
 
 
-@app.route('/api/trips/<string:route_id>')
-def get_trips(route_id):
-    try:
-        return jsonify(metra.get_trips(route_id))
-    except MetraError as e:
-        return e.message
-
-
 @app.route('/api/routes')
 def get_routes():
     try:

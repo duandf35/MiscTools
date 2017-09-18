@@ -48,12 +48,6 @@ class Metra:
                                     WHERE t.route_id = '{route_id}'",
                               columns=['route_id', 'stop_id', 'stop_name', 'stop_lat', 'stop_lon'])
 
-    def get_trips(self, route_id):
-        criteria = f"WHERE route_id = '{route_id}'"
-
-        return self.__query(columns=['route_id', 'trip_id', 'trip_headsign', 'direction_id'],
-                            table='trips', criteria=criteria)
-
     def get_stop_times(self, route_id, stop_id, weekday, arrival, departure):
         sql = f"SELECT DISTINCT t.route_id, st.trip_id, st.arrival_time, st.departure_time, \
                 st.stop_id, st.stop_sequence, t.trip_headsign \
