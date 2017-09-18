@@ -1,5 +1,5 @@
 from .lib.metra import Metra, MetraError
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 from pytz import timezone
@@ -57,7 +57,20 @@ def get_stop_times(route_id, stop_id):
         if arrival.hour > departure.hour:
             departure = None
 
-        return jsonify(metra.get_stop_times(route_id, stop_id, now.weekday(), arrival, departure))
+        stop_times = metra.get_stop_times(route_id, stop_id, now.weekday(), arrival, departure)
+
+        trimmed_trip_ids = {}
+        trimmed_stop_times = []
+        for stop_time in stop_times:
+            # trim the trip_id: BNSF_BN1212_V1_A => BNSF_BN1212
+            trimmed = '_'.join(stop_time['trip_id'].split('_')[:2])
+
+            if trimmed not in trimmed_trip_ids.keys():
+                trimmed_trip_ids[trimmed] = True
+                stop_time['trip_id'] = trimmed
+                trimmed_stop_times.append(stop_time)
+
+        return jsonify(trimmed_stop_times)
     except MetraError as e:
         return e.message
 

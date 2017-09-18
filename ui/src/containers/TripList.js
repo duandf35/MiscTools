@@ -32,22 +32,26 @@ TripList.propTypes = {
 };
 
 function displayTrips(trips, watchStops) {
-    let displayTrips = [];
+    let tripCount = {};
     watchStops.forEach(stopId => {
-        if (displayTrips.length > 0) {
-            let tripIds = trips[stopId].map(trip => {
-                return trip.tripId;
-            });
-
-            displayTrips = displayTrips.filter(trip => {
-               return tripIds.includes(trip.tripId);
-            })
-        } else if (trips[stopId]) {
-            displayTrips = trips[stopId];
-        }
+        trips[stopId].forEach(trip => {
+            if (!!tripCount[trip.tripId]) {
+                tripCount[trip.tripId]++;
+            } else {
+                tripCount[trip.tripId] = 1;
+            }
+        })
     });
 
-    return displayTrips;
+    let commonTrips = [];
+    watchStops.forEach(stopId => {
+        let buf = trips[stopId].filter(trip => {
+            return tripCount[trip.tripId] === watchStops.length;
+        });
+        commonTrips = commonTrips.concat(buf);
+    });
+
+    return commonTrips;
 }
 
 const mapStateToProps = ({ trips, watchStops }) => {

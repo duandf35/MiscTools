@@ -63,7 +63,8 @@ class Metra:
                 WHERE st.stop_id = '{stop_id}' AND t.route_id = '{route_id}' \
                 AND arrival_time >= '{arrival}' \
                 AND departure_time <= '{departure}' \
-                AND {self.weekdays[weekday]} == 1"
+                AND {self.weekdays[weekday]} == 1 \
+                ORDER BY st.arrival_time, departure_time DESC"
 
         return self.__execute(sql=sql,
                               columns=['route_id', 'trip_id', 'arrival_time', 'departure_time',
