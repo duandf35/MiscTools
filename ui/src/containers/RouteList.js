@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { PropTypes } from 'prop-types'
 import Route from '../components/Route'
 import { fetchRoutes, selectRoute } from '../actions/routeAction'
@@ -49,7 +48,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchStops(routeId));
         },
         // pass func into the component
-        ...bindActionCreators({ fetchRoutes }, dispatch),
+        fetchRoutes: () => dispatch(fetchRoutes())
     }
 };
 

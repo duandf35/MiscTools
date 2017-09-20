@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { PropTypes } from 'prop-types'
 import { storeSubscriber } from '../store'
 import Stop from '../components/Stop'
@@ -39,7 +38,7 @@ const mapDispatchToProps = (dispatch) => {
           dispatch(updateWatchStopQueue(stopId));
           dispatch(fetchTrips(stopId, routeId));
       },
-      ...bindActionCreators({ fetchTrips }, dispatch)
+      fetchTrips: (stopId, routeId) => dispatch(fetchTrips(stopId, routeId))
   }
 };
 
