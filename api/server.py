@@ -1,14 +1,20 @@
 from .lib.metra import Metra, MetraError
 from flask import Flask, jsonify
+from flask_socketio import SocketIO, send
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 from pytz import timezone
 from os import environ
 import json
 
-app = Flask(__name__)
 config = ConfigParser(environ)
 config.read('config.ini')
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = config['SOCKET']['SECRET']
+
+# the default namespace of websocket is 'socket.io'
+socketio = SocketIO(app)
 
 metra = Metra(usr=config['METRA']['USR'],
               pwd=config['METRA']['PWD'],
@@ -108,3 +114,11 @@ def get_positions():
         return jsonify(json.loads(positions))
     except MetraError as e:
         return e.message
+
+
+# ----------------------------------------------
+
+@socketio.on('stops')
+def get_stops_socket(route_id):
+    resp = json.dumps(metra.get_stops(route_id))
+    send(resp, json=True)
